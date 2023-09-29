@@ -70,6 +70,8 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
+    implementation("androidx.compose.material:material:1.5.2")
+
 
     //Splash Api
     implementation ("androidx.core:core-splashscreen:1.0.1")
@@ -109,6 +111,18 @@ dependencies {
     implementation ("androidx.room:room-runtime:$room_version")
     kapt ("androidx.room:room-compiler:$room_version")
     implementation ("androidx.room:room-ktx:2.5.2")
+
+
+
+    // Exo Player Library
+    implementation( "androidx.media3:media3-exoplayer:1.1.1")
+    implementation ("androidx.media3:media3-exoplayer-dash:1.1.1")
+    implementation ("androidx.media3:media3-ui:1.1.1")
+
+    implementation("androidx.compose.material:material-icons-extended:1.5.2")
+
+    //lottie
+    implementation("com.airbnb.android:lottie-compose:6.0.1")
 }
 
 
