@@ -9,6 +9,6 @@ class ValidatePhoneNumber {
 
         if (phoneNumber.length < 10)return  ValidationResult("Invalid Phone number")
 
-        return ValidationResult("",true)
+        return ValidationResult(null,true)
     }
 }

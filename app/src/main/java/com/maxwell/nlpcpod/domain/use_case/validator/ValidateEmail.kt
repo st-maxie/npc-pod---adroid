@@ -7,14 +7,14 @@ class ValidateEmail {
 
     operator fun invoke(email: String): ValidationResult {
 
-        if (email.isBlank()) return ValidationResult("Email is requird", false)
+        if (email.isBlank()) return ValidationResult("Email is required", false)
 
 
 
-        if (Patterns.EMAIL_ADDRESS.matcher(email)
+        if (!Patterns.EMAIL_ADDRESS.matcher(email)
                 .matches()
         ) return ValidationResult("Invalid Email", false)
 
-        return ValidationResult("", true)
+        return ValidationResult(null, true)
     }
 }

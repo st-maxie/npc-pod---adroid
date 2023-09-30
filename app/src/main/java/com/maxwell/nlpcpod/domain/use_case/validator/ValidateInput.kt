@@ -8,6 +8,6 @@ class ValidateInput {
 
         if (value.isBlank()) return ValidationResult("$name is required",false)
 
-        return  ValidationResult("",true)
+        return  ValidationResult(null,true)
     }
 }

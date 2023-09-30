@@ -9,7 +9,6 @@ class ValidatePassword {
 
         if (password.length < 8) return ValidationResult("Password must be least 8 character")
 
-
-        return ValidationResult("", true)
+        return ValidationResult(null, true)
     }
 }

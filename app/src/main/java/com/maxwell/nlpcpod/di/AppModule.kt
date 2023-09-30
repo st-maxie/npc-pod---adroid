@@ -1,11 +1,14 @@
 package com.maxwell.nlpcpod.di
 
-import com.maxwell.nlpcpod.domain.use_case.validator.LoginFormValidation
-import com.maxwell.nlpcpod.domain.use_case.validator.SignupFormValidation
-import com.maxwell.nlpcpod.domain.use_case.validator.ValidateEmail
-import com.maxwell.nlpcpod.domain.use_case.validator.ValidateInput
-import com.maxwell.nlpcpod.domain.use_case.validator.ValidatePassword
-import com.maxwell.nlpcpod.domain.use_case.validator.ValidatePhoneNumber
+import android.app.Application
+import com.maxwell.nlpcpod.data.manager.ManagerImpl
+import com.maxwell.nlpcpod.data.remote.AuthApi
+import com.maxwell.nlpcpod.data.repository.AuthRepositoryImpl
+import com.maxwell.nlpcpod.domain.manager.TokenManager
+import com.maxwell.nlpcpod.domain.repository.AuthRepository
+import com.maxwell.nlpcpod.domain.use_case.auth.Login
+import com.maxwell.nlpcpod.domain.use_case.auth.ReadAccessToken
+import com.maxwell.nlpcpod.domain.use_case.auth.SaveAccessToken
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,26 +19,33 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class AppModule {
 
-    @Provides
-    @Singleton
-    fun provideValidateEmail() = ValidateEmail()
-
 
     @Provides
     @Singleton
-    fun provideLoginValidation(validateEmail: ValidateEmail) =
-        LoginFormValidation(
-            validateEmail = validateEmail, validatePassword = ValidatePassword()
-        )
+    fun provideAuthRepository(authApi: AuthApi)=AuthRepositoryImpl(authApi)
 
 
     @Provides
     @Singleton
-    fun provideSignUpValidation(validateEmail: ValidateEmail) =
-        SignupFormValidation(
-            validateEmail = validateEmail,
-            validatePassword = ValidatePassword(),
-            validateFullname = ValidateInput(),
-            validatePhoneNumber = ValidatePhoneNumber()
-        )
+    fun provideLogin(authRepository: AuthRepository)= Login(authRepository)
+
+
+    @Provides
+    @Singleton
+    fun provideManagerImp(application:Application)=ManagerImpl(application)
+
+
+
+    @Provides
+    @Singleton
+    fun provideReadAccessToken(tokenManager: TokenManager)=ReadAccessToken(tokenManager)
+
+    @Provides
+    @Singleton
+    fun provideSavaAccessToken(tokenManager: TokenManager)=SaveAccessToken(tokenManager)
+
+
+
+
+
 }

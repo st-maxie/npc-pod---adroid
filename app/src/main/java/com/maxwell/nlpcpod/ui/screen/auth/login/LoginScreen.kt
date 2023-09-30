@@ -37,6 +37,7 @@ import com.maxwell.nlpcpod.ui.common.ContainedButton
 import com.maxwell.nlpcpod.ui.common.TextInput
 import com.maxwell.nlpcpod.ui.navigation.Screens
 import com.maxwell.nlpcpod.ui.theme.Red600
+import com.maxwell.nlpcpod.utils.Resource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,18 +45,27 @@ fun LoginScreen(
     navController: NavHostController,
     loginViewModel: LoginViewModel = hiltViewModel(),
     event: (LoginEvent) -> Unit = loginViewModel::onEvent,
-    state:LoginState = loginViewModel.state
+    state: LoginState = loginViewModel.state
 ) {
 
     LaunchedEffect(
-        key1 = state.success,
-        block = { if (state.success) navController.navigate(Screens.HomeNavigation.route) })
+        key1 = state.loginResponse,
+        block = {
+            when (state.loginResponse) {
+                is Resource.Loading -> {}
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-    ) {
+                is Resource.Success -> {
+                    navController.popBackStack();
+                    navController.navigate(Screens.HomeNavigation.route)
+                }
+
+                is Resource.Error -> {
+                    //state.loginResponse.message
+                }
+            }
+        })
+
+    Column(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)) {
 
         Spacer(modifier = Modifier.fillMaxHeight(0.1F))
 
@@ -71,6 +81,7 @@ fun LoginScreen(
             fontWeight = FontWeight.Normal,
             color = Color.LightGray.copy(0.9f)
         )
+
         Spacer(modifier = Modifier.height(48.dp))
 
         TextInput(
@@ -86,30 +97,27 @@ fun LoginScreen(
             leadingIcon = Icons.Outlined.Password,
             placeholder = "Password",
             onChange = { event(LoginEvent.OnPasswordChange(it.trim())) },
-            value = state.password
-            , errorMessage = state.passwordErrorMessage
+            value = state.password, errorMessage = state.passwordErrorMessage
         )
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        Text(text = "Forgot password?", modifier = Modifier
-            .fillMaxWidth()
-            .clickable { navController.navigate(Screens.ForgotPassword.route) })
+        Text(
+            text = "Forgot password?",
+            modifier = Modifier.fillMaxWidth().clickable { navController.navigate(Screens.ForgotPassword.route) })
 
         Spacer(modifier = Modifier.height(48.dp))
 
-        ContainedButton(label = "Login", onClick = {event(LoginEvent.OnSubmit)}
-        )
+        ContainedButton(label = "Login", onClick = { event(LoginEvent.OnSubmit) })
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        Row(modifier = Modifier.fillMaxWidth()) {
+        Row(modifier = Modifier.fillMaxWidth(), content = {
             Text(text = "Don't have an account? ", color = Color.LightGray.copy(0.9f))
             Text(
                 text = "Create one!",
                 modifier = Modifier.clickable { navController.navigate(Screens.Register.route) })
-        }
+        })
+
     }
-
-
 }
